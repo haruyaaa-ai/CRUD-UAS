@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Tesso Nilo</title>
+    <!-- Memuat Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Link ke file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="font-sans text-text-dark bg-bg-light">
+
+    <!-- PLACEHOLDER HEADER: Akan diisi oleh script.js saat DOMContentLoaded -->
+    <header id="mainHeader"></header>
+
+    <div id="aboutContent" class="view-content-public py-20 bg-bg-light">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-extrabold text-primary-green mb-4">Tentang Tesso Nilo</h1>
+                <p class="text-xl text-gray-600">Jantung konservasi terakhir di Sumatera</p>
+            </div>
+
+            <div class="bg-white p-8 md:p-12 rounded-xl shadow-2xl">
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-text-dark mb-4 flex items-center">
+                            <span data-lucide="map-pin" class="w-7 h-7 mr-3 text-secondary-yellow"></span>Lokasi dan
+                            Sejarah
+                        </h2>
+                        <p class="mb-4 text-gray-700">Taman Nasional Tesso Nilo (TNTN) adalah salah satu kawasan hutan
+                            hujan tropis dataran rendah yang tersisa dan paling penting di Provinsi Riau, Pulau
+                            Sumatera. Kawasan ini dikenal sebagai 'Rimban Terakhir' karena memiliki keanekaragaman
+                            hayati yang sangat tinggi, bahkan diklaim sebagai salah satu yang tertinggi di dunia.</p>
+                        <p class="mb-4 text-gray-700">Diresmikan sebagai Taman Nasional pada tahun 2004, TNTN memiliki
+                            luas sekitar 83.068 hektar. Fungsinya vital, terutama sebagai koridor utama dan habitat
+                            penting bagi Gajah Sumatera dan Harimau Sumatera yang terancam punah.</p>
+                    </div>
+                    <div class="rounded-xl overflow-hidden shadow-lg">
+                        <!-- Placeholder Image: Peta Tesso Nilo -->
+                        <!-- Google Maps Embed: Taman Nasional Tesso Nilo -->
+                        <iframe
+                            src="https://maps.google.com/maps?q=Taman+Nasional+Tesso+Nilo&t=&z=10&ie=UTF8&iwloc=&output=embed"
+                            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="mt-12 pt-8 border-t">
+                    <h2 class="text-3xl font-bold text-text-dark mb-6 text-center">Visi & Misi Kami</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <span data-lucide="shield-check" class="w-8 h-8 mx-auto text-primary-green mb-3"></span>
+                            <h3 class="font-semibold text-lg mb-2">Konservasi</h3>
+                            <p class="text-sm text-gray-600">Melindungi ekosistem hutan dan satwa liar, khususnya
+                                spesies kunci seperti Gajah dan Harimau.</p>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <span data-lucide="microscope" class="w-8 h-8 mx-auto text-accent-blue mb-3"></span>
+                            <h3 class="font-semibold text-lg mb-2">Edukasi & Riset</h3>
+                            <p class="text-sm text-gray-600">Menyediakan fasilitas riset dan edukasi untuk pemahaman
+                                keanekaragaman hayati.</p>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <span data-lucide="handshake" class="w-8 h-8 mx-auto text-secondary-yellow mb-3"></span>
+                            <h3 class="font-semibold text-lg mb-2">Pemberdayaan</h3>
+                            <p class="text-sm text-gray-600">Mendukung pengembangan ekowisata berbasis masyarakat di
+                                zona penyangga.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Wajib (Selalu Tampil) -->
+    <footer id="mainFooter" class="bg-text-dark text-gray-400 py-4 text-center text-sm mt-auto">
+        <!-- GANTI DENGAN DATA ANDA -->
+        @Copyright by 23552011300_Damar Satriatama Putra_TIF RP 23 CNS A
+    </footer>
+
+    <!-- Link ke file JavaScript eksternal untuk Header/Footer/Ikon -->
+    <script src="script.js?v=20"></script>
+</body>
+
+</html>

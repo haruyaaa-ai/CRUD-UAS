@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satwa Kunci Tesso Nilo</title>
+    <!-- Memuat Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Link ke file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="font-sans text-text-dark bg-bg-light">
+
+    <!-- PLACEHOLDER HEADER: Akan diisi oleh script.js saat DOMContentLoaded -->
+    <header id="mainHeader"></header>
+
+    <div id="faunaContent" class="view-content-public py-20 bg-bg-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-extrabold text-primary-green mb-4">Satwa Kunci Tesso Nilo</h1>
+                <p class="text-xl text-gray-600">Spesies endemik yang dilindungi di Rimba Terakhir Sumatera.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Data Satwa 1: Gajah Sumatera -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-primary-green">
+                    <div class="flex items-start mb-4">
+                        <span data-lucide="bot" class="w-10 h-10 mr-4 text-orange-600"></span>
+                        <div>
+                            <h3 class="text-xl font-bold text-text-dark">Gajah Sumatera</h3>
+                            <p class="text-sm italic text-gray-500">Elephas maximus sumatranus</p>
+                        </div>
+                    </div>
+                    <p class="text-sm font-semibold mb-3">Status Konservasi: <span class="text-red-600">Kritis
+                            (Critically Endangered)</span></p>
+                    <p class="text-gray-600">Tesso Nilo merupakan salah satu kantong populasi Gajah Sumatera terpenting.
+                        Hutan ini menjadi koridor migrasi dan rumah bagi puluhan individu gajah, yang seringkali memicu
+                        konflik dengan permukiman karena hilangnya habitat.</p>
+                </div>
+
+                <!-- Data Satwa 2: Harimau Sumatera -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-primary-green">
+                    <div class="flex items-start mb-4">
+                        <span data-lucide="cat" class="w-10 h-10 mr-4 text-red-600"></span>
+                        <div>
+                            <h3 class="text-xl font-bold text-text-dark">Harimau Sumatera</h3>
+                            <p class="text-sm italic text-gray-500">Panthera tigris sumatrae</p>
+                        </div>
+                    </div>
+                    <p class="text-sm font-semibold mb-3">Status Konservasi: <span class="text-red-600">Kritis
+                            (Critically Endangered)</span></p>
+                    <p class="text-gray-600">Predator puncak di ekosistem Tesso Nilo. Keberadaannya sangat penting
+                        sebagai indikator kesehatan hutan. Populasi harimau sangat rentan akibat perburuan liar dan
+                        fragmentasi hutan.</p>
+                </div>
+
+                <!-- Data Satwa 3: Tapir Asia -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-primary-green">
+                    <div class="flex items-start mb-4">
+                        <span data-lucide="dices" class="w-10 h-10 mr-4 text-gray-600"></span>
+                        <div>
+                            <h3 class="text-xl font-bold text-text-dark">Tapir Asia</h3>
+                            <p class="text-sm italic text-gray-500">Tapirus indicus</p>
+                        </div>
+                    </div>
+                    <p class="text-sm font-semibold mb-3">Status Konservasi: <span class="text-orange-500">Rentan
+                            (Vulnerable)</span></p>
+                    <p class="text-gray-600">Mamalia herbivora unik dengan ciri khas warna hitam-putih. Tapir sering
+                        ditemukan di area rawa dan perbukitan rendah. Mereka adalah penyebar biji yang krusial bagi
+                        regenerasi hutan.</p>
+                </div>
+
+                <!-- Data Satwa 4: Rangkong Badak -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-primary-green">
+                    <div class="flex items-start mb-4">
+                        <span data-lucide="feather" class="w-10 h-10 mr-4 text-yellow-600"></span>
+                        <div>
+                            <h3 class="text-xl font-bold text-text-dark">Rangkong Badak</h3>
+                            <p class="text-sm italic text-gray-500">Buceros rhinoceros</p>
+                        </div>
+                    </div>
+                    <p class="text-sm font-semibold mb-3">Status Konservasi: <span class="text-yellow-700">Hampir
+                            Terancam (Near Threatened)</span></p>
+                    <p class="text-gray-600">Burung besar yang terkenal dengan cula (casque) di atas paruhnya. Rangkong
+                        adalah barometer kualitas hutan yang baik karena sensitif terhadap perubahan lingkungan.</p>
+                </div>
+            </div>
+
+            <div class="mt-16 bg-white p-8 rounded-xl shadow-xl border-l-4 border-secondary-yellow">
+                <h2 class="text-3xl font-bold text-text-dark mb-4 flex items-center">
+                    <span data-lucide="megaphone" class="w-7 h-7 mr-3 text-secondary-yellow"></span>Peringatan
+                    Konservasi
+                </h2>
+                <p class="text-lg text-gray-700">Semua satwa di atas berada di bawah perlindungan penuh undang-undang.
+                    Perburuan, perdagangan, atau perusakan habitat adalah kejahatan serius.</p>
+                <p class="mt-4 text-sm text-gray-500">Data status konservasi disimulasikan berdasarkan data IUCN Red
+                    List terkini.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Wajib (Selalu Tampil) -->
+    <footer id="mainFooter" class="bg-text-dark text-gray-400 py-4 text-center text-sm mt-auto">
+        <!-- GANTI DENGAN DATA ANDA -->
+        @Copyright by 23552011300_Damar Satriatama Putra_TIF RP 23 CNS A
+    </footer>
+
+    <!-- Link ke file JavaScript eksternal untuk Header/Footer/Ikon -->
+    <script src="script.js?v=20"></script>
+</body>
+
+</html>

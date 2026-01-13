@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk Admin - Tesso Nilo Project</title>
+    <!-- Memuat Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Link ke file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="font-sans text-text-dark bg-bg-light flex flex-col min-h-screen">
+
+    <!-- PLACEHOLDER HEADER: Akan diisi oleh script.js saat DOMContentLoaded -->
+    <header id="mainHeader"></header>
+
+    <!-- Konten Login -->
+    <div class="login-bg view-content-public flex-grow flex items-center justify-center p-4">
+        <div class="bg-white p-8 md:p-12 rounded-xl shadow-2xl w-full max-w-md backdrop-blur-sm bg-opacity-95">
+            <div class="text-center mb-8">
+                <span data-lucide="log-in" class="w-12 h-12 mx-auto text-primary-green mb-2"></span>
+                <h1 class="text-3xl font-bold text-primary-green">Masuk Akun</h1>
+                <p class="text-lg text-gray-600 mt-2">Silakan login untuk melanjutkan</p>
+                <div class="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-800">
+                    <p>Demo Admin: <strong>admin</strong> / <strong>12345</strong></p>
+                    <p>Demo User: <strong>pengunjung</strong> / <strong>12345</strong></p>
+                </div>
+            </div>
+
+            <form id="loginForm">
+                <div class="space-y-6">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <input type="text" id="username" placeholder="Masukkan username"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
+                            required>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="password" placeholder="Masukkan password"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
+                            required>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary-green text-white font-semibold py-3 rounded-lg mt-8 hover:bg-green-700 transition duration-300 shadow-md transform hover:scale-[1.01]">
+                    MASUK
+                </button>
+
+                <p id="errorMessage" class="text-red-500 text-sm mt-4 text-center hidden"></p>
+                <!-- Link ke register.html -->
+                <p class="text-center text-sm mt-4">Belum punya akun? <a href="register.html"
+                        class="text-accent-blue font-semibold hover:underline">Daftar Sekarang</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Wajib (Selalu Tampil) -->
+    <footer id="mainFooter" class="bg-text-dark text-gray-400 py-4 text-center text-sm mt-auto">
+        <!-- GANTI DENGAN DATA ANDA -->
+        @Copyright by 23552011300_Damar Satriatama Putra_TIF RP 23 CNS A
+    </footer>
+
+    <!-- Link ke file JavaScript eksternal untuk Header/Footer/Ikon dan Logika Login -->
+    <script src="script.js?v=20"></script>
+    <script>
+        // Gunakan relative path untuk mencegah error folder
+        const API_BASE = 'api';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            lucide.createIcons();
+            handleHybridHeader(false); // No login header for login page
+
+            // Override handleLogin to use backend
+            const loginForm = document.getElementById('loginForm');
+
+            loginForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                console.log('Login attempt started...');
+
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+                const errorMessage = document.getElementById('errorMessage');
+                const submitBtn = document.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerText;
+
+                // Visual Feedback
+                submitBtn.disabled = true;
+                submitBtn.innerText = "SEDANG MASUK...";
+                errorMessage.classList.add('hidden');
+
+                try {
+                    // Fetch menggunakan relative path ke folder api
+                    const response = await fetch('api/auth/login.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    console.log('Response status:', response.status);
+                    const text = await response.text(); // Get text first to debug invalid JSON
+                    console.log('Response body:', text);
+
+                    let result;
+                    try {
+                        result = JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Server response is not valid JSON. Raw response: ' + text.substring(0, 100));
+                    }
+
+                    if (result.success) {
+                        alert('Login Berhasil! Klik OK untuk masuk ke dashboard.');
+                        sessionStorage.setItem('isLoggedIn', 'true');
+                        sessionStorage.setItem('user_data', JSON.stringify(result.data));
+
+                        if (result.data.role === 'admin') {
+                            window.location.href = '/tessonilov3/dashboard.html'; // Explicit path
+                        } else {
+                            window.location.href = '/tessonilov3/index.html';
+                        }
+                    } else {
+                        const msg = result.message || 'Username atau password tidak sesuai';
+                        alert('Login Gagal: ' + msg);
+                        errorMessage.textContent = msg;
+                        errorMessage.classList.remove('hidden');
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalBtnText;
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    alert('ERROR: ' + error.message);
+                    errorMessage.textContent = 'System Error: ' + error.message;
+                    errorMessage.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalBtnText;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

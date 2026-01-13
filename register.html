@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Akun - Tesso Nilo Project</title>
+    <!-- Memuat Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Link ke file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="font-sans text-text-dark bg-bg-light flex flex-col min-h-screen">
+
+    <!-- PLACEHOLDER HEADER: Akan diisi oleh script.js saat DOMContentLoaded -->
+    <header id="mainHeader"></header>
+
+    <!-- Konten Registrasi -->
+    <div class="login-bg view-content-public flex-grow flex items-center justify-center p-4">
+        <div class="bg-white p-8 md:p-12 rounded-xl shadow-2xl w-full max-w-md backdrop-blur-sm bg-opacity-95">
+            <div class="text-center mb-8">
+                <span data-lucide="user-plus" class="w-12 h-12 mx-auto text-secondary-yellow mb-2"></span>
+                <h1 class="text-3xl font-bold text-primary-green">Daftar Akun Baru</h1>
+                <p class="text-sm text-gray-600 mt-2">Hanya untuk tujuan demo/simulasi.</p>
+            </div>
+
+            <form id="registerForm">
+                <div class="space-y-4">
+                    <div>
+                        <label for="reg_username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <input type="text" id="reg_username" placeholder="Masukkan username"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
+                            required>
+                    </div>
+                    <div>
+                        <label for="reg_email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="reg_email" placeholder="Masukkan email"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
+                            required>
+                    </div>
+                    <div>
+                        <label for="reg_fullname" class="block text-sm font-medium text-gray-700 mb-2">Nama
+                            Lengkap</label>
+                        <input type="text" id="reg_fullname" placeholder="Masukkan nama lengkap"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
+                            required>
+                    </div>
+                    <div>
+                        <label for="reg_phone" class="block text-sm font-medium text-gray-700 mb-2">Nomor
+                            Telepon</label>
+                        <input type="tel" id="reg_phone" placeholder="Masukkan nomor telepon"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
+                            required>
+                    </div>
+                    <div>
+                        <label for="reg_password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="reg_password" placeholder="Buat password"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
+                            required>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-secondary-yellow text-text-dark font-semibold py-3 rounded-lg mt-8 hover:bg-yellow-600 transition duration-300 shadow-md transform hover:scale-[1.01]">
+                    REGISTRASI
+                </button>
+
+                <p id="registerMessage" class="text-sm mt-4 text-center hidden"></p>
+                <p class="text-center text-sm mt-4">Sudah punya akun? <a href="login.html"
+                        class="text-accent-blue font-semibold hover:underline">Masuk</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Wajib (Selalu Tampil) -->
+    <footer id="mainFooter" class="bg-text-dark text-gray-400 py-4 text-center text-sm mt-auto">
+        <!-- GANTI DENGAN DATA ANDA -->
+        @Copyright by 23552011300_Damar Satriatama Putra_TIF RP 23 CNS A
+    </footer>
+
+    <!-- Link ke file JavaScript eksternal untuk Header/Footer/Ikon dan Logika Registrasi -->
+    <script src="script.js?v=20"></script>
+    <script>
+        const API_BASE = '/tessonilov3/api';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            lucide.createIcons();
+            handleHybridHeader(false);
+
+            document.getElementById('registerForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const data = {
+                    username: document.getElementById('reg_username').value.trim(),
+                    email: document.getElementById('reg_email').value.trim(),
+                    full_name: document.getElementById('reg_fullname').value.trim(),
+                    phone: document.getElementById('reg_phone').value.trim(),
+                    password: document.getElementById('reg_password').value.trim()
+                };
+
+                const messageEl = document.getElementById('registerMessage');
+
+                try {
+                    const response = await fetch(API_BASE + '/auth/register.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        messageEl.textContent = 'Registrasi berhasil! Silakan login dengan akun Anda.';
+                        messageEl.classList.remove('hidden', 'text-red-500');
+                        messageEl.classList.add('text-green-500');
+                        document.getElementById('registerForm').reset();
+
+                        setTimeout(() => {
+                            window.location.href = '/tessonilov3/login.html';
+                        }, 2000);
+                    } else {
+                        messageEl.textContent = result.message || 'Registrasi gagal. Silakan coba lagi.';
+                        messageEl.classList.remove('hidden', 'text-green-500');
+                        messageEl.classList.add('text-red-500');
+                    }
+                } catch (error) {
+                    console.error('Register error:', error);
+                    messageEl.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+                    messageEl.classList.remove('hidden', 'text-green-500');
+                    messageEl.classList.add('text-red-500');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

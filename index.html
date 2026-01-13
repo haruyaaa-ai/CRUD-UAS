@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taman Nasional Tesso Nilo - Home</title>
+    <!-- Memuat Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Link ke file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="font-sans text-text-dark bg-bg-light min-h-screen flex flex-col">
+
+    <!-- Header: Akan diisi oleh script.js -->
+    <header id="mainHeader"></header>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+        <!-- Hero Section -->
+        <section class="login-bg py-32 px-4 min-h-[500px] flex items-center">
+            <div class="max-w-6xl mx-auto text-center w-full">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                    Taman Nasional Tesso Nilo
+                </h1>
+                <p class="text-xl md:text-2xl text-white mb-8">
+                    Jelajahi keindahan alam dan keanekaragaman hayati kawasan Riau
+                </p>
+            </div>
+        </section>
+
+        <!-- Info Section -->
+        <section class="py-12 px-4">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl font-bold text-primary-green mb-8 text-center">Informasi Taman</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+                        <span data-lucide="map-pin" class="w-8 h-8 text-primary-green mb-4"></span>
+                        <h3 class="text-xl font-semibold mb-2">Lokasi</h3>
+                        <p class="text-gray-600">Kabupaten Kuantan Singingi, Provinsi Riau, Indonesia</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+                        <span data-lucide="clock" class="w-8 h-8 text-primary-green mb-4"></span>
+                        <h3 class="text-xl font-semibold mb-2">Jam Operasional</h3>
+                        <p class="text-gray-600">Setiap hari: 08:00 - 17:00 WIB</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+                        <span data-lucide="users" class="w-8 h-8 text-primary-green mb-4"></span>
+                        <h3 class="text-xl font-semibold mb-2">Pengunjung</h3>
+                        <p class="text-gray-600">Ribuan pengunjung setiap tahunnya</p>
+                    </div>
+                </div>
+
+                <!-- Deskripsi -->
+                <div class="bg-green-50 border-l-4 border-primary-green rounded p-6 mb-12">
+                    <h3 class="text-2xl font-semibold text-primary-green mb-4">Tentang Tesso Nilo</h3>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        Taman Nasional Tesso Nilo adalah salah satu kawasan konservasi terpenting di Sumatera.
+                        Dengan luas sekitar 385,000 hektar, taman ini menjadi rumah bagi ribuan spesies flora dan fauna
+                        yang langka dan terancam punah.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed">
+                        Pengunjung dapat melihat keanekaragaman hayati yang menakjubkan, termasuk gajah Sumatera,
+                        harimau Sumatera, dan berbagai spesies burung endemik.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section (Only for logged in customers) -->
+        <section id="bookingSection" class="py-12 px-4 bg-green-50 hidden">
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold text-primary-green mb-8 text-center">Pesan Tiket Anda</h2>
+
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <form id="customerBookingForm">
+                        <!-- Customer Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                                <input type="text" id="bookingName" placeholder="Nama Anda"
+                                    class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" id="bookingEmail" placeholder="Email Anda"
+                                    class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
+                            <input type="tel" id="bookingPhone" placeholder="08XX..."
+                                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green"
+                                required>
+                        </div>
+
+                        <!-- Booking Details -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kunjungan</label>
+                                <input type="date" id="bookingDate" placeholder="Tanggal Kunjungan"
+                                    class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Tiket</label>
+                                <div class="flex items-center gap-2">
+                                    <button type="button" onclick="decreaseTickets()"
+                                        class="bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">-</button>
+                                    <input type="number" id="bookingTickets" value="1" min="1" max="100"
+                                        placeholder="Jumlah" class="w-20 border rounded px-3 py-2 text-center" required>
+                                    <button type="button" onclick="increaseTickets()"
+                                        class="bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Display -->
+                        <div class="bg-blue-50 border border-blue-200 rounded p-4 mb-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700 font-medium">Harga per Tiket:</span>
+                                <span id="pricePerTicket" class="text-2xl font-bold text-primary-green">Rp
+                                    125.000</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="text-gray-700 font-medium">Total Harga:</span>
+                                <span id="totalPrice" class="text-3xl font-bold text-primary-green">Rp 125.000</span>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-primary-green text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition duration-300">
+                            <span data-lucide="check-circle" class="w-5 h-5 inline mr-2"></span>
+                            Pesan Sekarang
+                        </button>
+                    </form>
+
+                    <!-- Booking History -->
+                    <div class="mt-8 pt-8 border-t">
+                        <h3 class="text-xl font-semibold text-primary-green mb-4">Riwayat Pemesanan Anda</h3>
+                        <div id="bookingHistory" class="space-y-3"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="mainFooter" class="bg-text-dark text-gray-400 py-4 text-center text-sm mt-auto">
+        @Copyright by 23552011300_Damar Satriatama Putra_TIF RP 23 CNS A
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="bookingSuccessModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full">
+            <div class="text-center mb-4">
+                <span data-lucide="check-circle" class="w-12 h-12 text-green-600 mx-auto"></span>
+            </div>
+            <h2 class="text-2xl font-bold text-center mb-2">Pemesanan Berhasil!</h2>
+            <p class="text-gray-600 text-center mb-4">Nomor Booking Anda:</p>
+            <p id="bookingNumber" class="text-3xl font-bold text-primary-green text-center mb-6"></p>
+            <p class="text-gray-600 text-center mb-6">Terima kasih telah memesan tiket kami!</p>
+            <button onclick="closeSuccessModal()"
+                class="w-full bg-primary-green text-white py-2 rounded hover:bg-green-700">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- Link ke file JavaScript eksternal -->
+    <script src="script.js?v=20"></script>
+    <script>
+        const API_BASE = '/tessonilov3/api';
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            lucide.createIcons();
+
+            // Check if user is logged in
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            handleHybridHeader(isLoggedIn);
+
+            const userData = JSON.parse(sessionStorage.getItem('user_data') || '{}');
+
+            if (isLoggedIn && userData.role === 'customer') {
+                // Booking section moved to booking.html
+            }
+        });
+
+        function setupBookingForm() {
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').setAttribute('min', today);
+
+            // Setup price update on tickets change
+            document.getElementById('bookingTickets').addEventListener('change', updatePrice);
+
+            // Setup form submission
+            document.getElementById('customerBookingForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await submitBooking();
+            });
+        }
+
+        function updatePrice() {
+            const tickets = parseInt(document.getElementById('bookingTickets').value) || 1;
+            const pricePerTicket = 125000; // Default Rp 125.000
+            const totalPrice = tickets * pricePerTicket;
+
+            document.getElementById('totalPrice').textContent =
+                'Rp ' + totalPrice.toLocaleString('id-ID');
+        }
+
+        function increaseTickets() {
+            const input = document.getElementById('bookingTickets');
+            input.value = Math.min(parseInt(input.value) + 1, 100);
+            updatePrice();
+        }
+
+        function decreaseTickets() {
+            const input = document.getElementById('bookingTickets');
+            input.value = Math.max(parseInt(input.value) - 1, 1);
+            updatePrice();
+        }
+
+        async function submitBooking() {
+            const userData = JSON.parse(sessionStorage.getItem('user_data') || '{}');
+
+            const bookingData = {
+                name: document.getElementById('bookingName').value,
+                email: document.getElementById('bookingEmail').value,
+                phone: document.getElementById('bookingPhone').value,
+                date_booking: document.getElementById('bookingDate').value,
+                tickets: parseInt(document.getElementById('bookingTickets').value),
+                total_price: parseInt(document.getElementById('bookingTickets').value) * 125000
+            };
+
+            try {
+                const response = await fetch(API_BASE + '/reservasi/create.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookingData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('bookingNumber').textContent = 'TK-' + result.data.id;
+                    document.getElementById('bookingSuccessModal').classList.remove('hidden');
+
+                    // Reset form
+                    document.getElementById('customerBookingForm').reset();
+                    document.getElementById('bookingName').value = userData.full_name || '';
+                    document.getElementById('bookingEmail').value = userData.email || '';
+
+                    updatePrice();
+                    loadBookingHistory();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+            }
+        }
+
+        async function loadBookingHistory() {
+            try {
+                const response = await fetch(API_BASE + '/reservasi/read.php');
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const bookings = result.data.slice(0, 3); // Last 3 bookings
+                    const historyHtml = bookings.map(b => `
+                        <div class="bg-gray-50 rounded p-4 border-l-4 border-primary-green">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold text-gray-800">Booking ID: TK-${b.id}</p>
+                                    <p class="text-sm text-gray-600">Tanggal: ${new Date(b.date_booking).toLocaleDateString('id-ID')}</p>
+                                    <p class="text-sm text-gray-600">Jumlah: ${b.tickets} tiket</p>
+                                </div>
+                                <span class="px-3 py-1 rounded text-sm font-medium ${b.status === 'confirmed' ? 'bg-green-200 text-green-800' :
+                            b.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
+                                'bg-red-200 text-red-800'
+                        }">
+                                    ${b.status.charAt(0).toUpperCase() + b.status.slice(1)}
+                                </span>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    document.getElementById('bookingHistory').innerHTML = historyHtml || '<p class="text-gray-500">Belum ada riwayat pemesanan</p>';
+                }
+            } catch (error) {
+                console.error('Load history error:', error);
+            }
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('bookingSuccessModal').classList.add('hidden');
+        }
+
+        // Initialize price display
+        updatePrice();
+    </script>
+</body>
+
+</html>

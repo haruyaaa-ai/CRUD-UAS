@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Tiket - Tesso Nilo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js?v=20"></script>
+</head>
+
+<body class="font-sans text-text-dark bg-bg-light min-h-screen flex flex-col">
+    <header id="mainHeader"></header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Booking Form -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl font-bold text-primary-green mb-6">Pesan Tiket Anda</h2>
+
+                    <form id="bookingForm" class="space-y-6">
+                        <!-- Personal Info -->
+                        <fieldset class="border-b pb-6">
+                            <legend class="text-lg font-semibold mb-4">Informasi Pribadi</legend>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
+                                    <input type="text" id="name" placeholder="Nama Lengkap Anda" required
+                                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Email</label>
+                                    <input type="email" id="email" placeholder="Email Anda" required
+                                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Nomor Telepon</label>
+                                    <input type="tel" id="phone" placeholder="Nomor Telepon" required
+                                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green">
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Booking Details -->
+                        <fieldset class="border-b pb-6">
+                            <legend class="text-lg font-semibold mb-4">Detail Pemesanan</legend>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Tanggal Kunjungan</label>
+                                    <input type="date" id="date_booking" placeholder="Tanggal Kunjungan" required
+                                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Kategori Kebangsaan</label>
+                                    <select id="citizen_type"
+                                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green"
+                                        onchange="calculateTotalPrice()">
+                                        <option value="wni">WNI (Domestik) - Rp 15.000</option>
+                                        <option value="wna">WNA (Mancanegara) - Rp 150.000</option>
+                                    </select>
+                                </div>
+                                <div class="mt-4 md:mt-0">
+                                    <label class="block text-sm font-medium mb-1">Jumlah Tiket</label>
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" class="px-3 py-2 border rounded hover:bg-gray-100"
+                                            onclick="changeQuantity(-1)">−</button>
+                                        <input type="number" id="tickets" value="1" min="1" max="100"
+                                            placeholder="Jumlah" required
+                                            class="w-20 border rounded px-3 py-2 text-center">
+                                        <button type="button" class="px-3 py-2 border rounded hover:bg-gray-100"
+                                            onclick="changeQuantity(1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ticket Price Display -->
+                            <div id="ticketPriceInfo" class="mt-4 p-4 bg-gray-50 rounded">
+                                <p class="text-lg font-bold text-primary-green">Total: <span id="totalPrice">Rp
+                                        125.000</span></p>
+                            </div>
+                        </fieldset>
+
+                        <!-- Payment Method Selection -->
+                        <fieldset class="pb-6 border-b mb-6">
+                            <legend class="text-lg font-semibold mb-4">Metode Pembayaran</legend>
+                            <div class="space-y-3">
+                                <label
+                                    class="flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 bg-green-50 border-primary-green">
+                                    <input type="radio" name="payment_method" value="qris" checked
+                                        class="h-4 w-4 text-primary-green focus:ring-primary-green">
+                                    <div class="ml-3 flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-medium text-gray-900">QRIS (GoPay, OVO, Dana, BCA)</span>
+                                            <i data-lucide="qr-code" class="h-6 w-6 text-gray-400"></i>
+                                        </div>
+                                        <p class="text-sm text-gray-500">Scan QR Code untuk pembayaran instan otomatis.
+                                        </p>
+                                    </div>
+                                </label>
+                                <!-- Placeholder for other methods -->
+                                <label class="flex items-center p-4 border rounded cursor-pointer opacity-60">
+                                    <input type="radio" name="payment_method" value="transfer" disabled
+                                        class="h-4 w-4 text-gray-300">
+                                    <div class="ml-3">
+                                        <span class="font-medium text-gray-400">Transfer Bank (Manual)</span>
+                                        <p class="text-sm text-gray-400">Sedang gangguan</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <!-- Notes -->
+                        <fieldset class="pb-6">
+                            <legend class="text-lg font-semibold mb-4">Catatan Tambahan (Opsional)</legend>
+                            <textarea id="notes" rows="4"
+                                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-green"
+                                placeholder="Catatan atau permintaan khusus..."></textarea>
+                        </fieldset>
+
+                        <!-- Terms & Submit -->
+                        <div class="space-y-4">
+                            <label class="flex items-start gap-2">
+                                <input type="checkbox" id="terms" required class="mt-1">
+                                <span class="text-sm text-gray-600">Saya menyetujui <a href="javascript:void(0)"
+                                        onclick="toggleTermsModal(true)"
+                                        class="text-primary-green hover:underline font-semibold">Syarat dan
+                                        Ketentuan</a> pemesanan
+                                    tiket</span>
+                            </label>
+                            <button type="submit"
+                                class="w-full bg-primary-green text-white py-3 rounded font-semibold hover:bg-green-800 transition">
+                                Lanjut Pembayaran
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Booking Information & History -->
+            <div class="space-y-6">
+                <!-- Booking Info Box -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold">Riwayat Terakhir</h3>
+                        <a href="riwayat.html"
+                            class="text-xs text-primary-green hover:underline font-bold uppercase tracking-wider">Lihat
+                            Semua</a>
+                    </div>
+                    <div id="bookingsList" class="space-y-4">
+                        <!-- Recent bookings will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Konfirmasi Data (Langkah 1) -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-4">Konfirmasi Data</h3>
+            <div id="confirmDetails" class="space-y-2 mb-6 text-sm"></div>
+            <div class="space-y-2 mb-6">
+                <p class="text-sm text-gray-600">Total Tagihan:</p>
+                <p class="text-2xl font-bold text-primary-green" id="confirmTotal">Rp 0</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="cancelConfirm()"
+                    class="flex-1 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 transition">Ubah
+                    Data</button>
+                <button type="button" onclick="processToPayment()"
+                    class="flex-1 bg-primary-green text-white py-2 rounded hover:bg-green-800 transition">Lanjut
+                    Bayar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pembayaran Premium (Langkah 2) -->
+    <div id="paymentModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white rounded-[32px] w-full max-w-4xl overflow-hidden shadow-2xl border border-gray-50 relative">
+            <!-- Close Button -->
+            <button onclick="closePaymentModal()" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="p-8 md:p-12">
+                <!-- Header Card -->
+                <div class="flex flex-col md:flex-row justify-between items-start mb-12 gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Pembayaran Pesanan</h1>
+                        <p class="text-sm text-gray-400 mt-2">Token: <span id="paymentToken"
+                                class="font-bold text-gray-600 tracking-wider uppercase">...</span></p>
+                    </div>
+                    <div
+                        class="bg-amber-50 text-amber-700 px-4 py-2 rounded-full text-[11px] font-bold tracking-wide uppercase flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
+                        Menunggu Pembayaran
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Left Column: QR Code -->
+                    <div class="flex flex-col items-center">
+                        <div class="relative bg-white p-3 border border-gray-100 rounded-2xl group">
+                            <img id="qrisImage"
+                                src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=PENDING"
+                                alt="QRIS QR Code" class="w-60 h-60 md:w-64 md:h-64">
+                        </div>
+                        <p class="text-[11px] text-gray-400 text-center mt-6 font-medium tracking-wide">Scan atau bayar
+                            ke QR di atas</p>
+                        <p class="text-3xl font-black text-gray-900 mt-3" id="paymentTotalPremium">Rp 0</p>
+
+                        <!-- Copy Buttons -->
+                        <div class="grid grid-cols-2 gap-4 w-full max-w-xs mt-10">
+                            <button onclick="copyToClipboard('trxid')"
+                                class="border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all">
+                                Salin TRXID
+                            </button>
+                            <button onclick="copyToClipboard('token')"
+                                class="border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all">
+                                Salin TOKEN
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Details -->
+                    <div class="flex flex-col justify-between">
+                        <div class="space-y-6">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-sm text-gray-400 font-medium tracking-wide">Durasi</span>
+                                <span class="text-sm font-bold text-gray-700">1</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-sm text-gray-400 font-medium tracking-wide">Nama</span>
+                                <span class="text-sm font-bold text-gray-700" id="detailName">...</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-sm text-gray-400 font-medium tracking-wide">Nomor WA</span>
+                                <span class="text-sm font-bold text-gray-700" id="detailPhone">...</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-8 border-t border-gray-100">
+                            <p class="text-[10px] uppercase font-bold text-gray-300 tracking-widest mb-3">ID Transaksi
+                            </p>
+                            <div class="flex justify-between items-baseline">
+                                <span class="text-lg font-black text-gray-600 tracking-tight"
+                                    id="detailTrxId">...</span>
+                                <span class="text-[11px] font-medium text-gray-400" id="detailDate">...</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-12 bg-gray-50/50 rounded-2xl p-6 border border-gray-100">
+                            <div class="flex justify-between items-center mb-6">
+                                <div>
+                                    <p class="text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-2">Waktu
+                                        Tersisa</p>
+                                    <p class="text-2xl countdown-font font-mono font-black text-emerald-600"
+                                        id="countdown">00 : 59 : 59</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-2">Total
+                                    </p>
+                                    <p class="text-2xl font-black text-gray-900" id="paymentTotalSmall">Rp 0</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <button id="statusBtn" onclick="simulatePaymentSuccess()"
+                                    class="bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all">
+                                    <span>Cek status</span>
+                                </button>
+                                <button onclick="closePaymentModal()"
+                                    class="bg-rose-500 hover:bg-rose-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
+                                    Batalkan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Note -->
+                <div class="mt-16 pt-8 border-t border-gray-50">
+                    <p class="text-[11px] text-gray-400 leading-relaxed font-medium">
+                        Catatan: simpan TRXID sebagai bukti. Verifikasi pembayaran dilakukan oleh sistem secara otomatis
+                        setelah dana diterima oleh penyedia layanan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4 text-center">
+            <i data-lucide="check-circle" class="h-16 w-16 text-green-500 mx-auto mb-4"></i>
+            <h3 class="text-xl font-bold mb-2">Pembayaran Berhasil!</h3>
+            <p class="text-gray-600 mb-4">Tiket Anda telah terbit.</p>
+            <p class="text-gray-600 mb-6 font-mono text-sm bg-gray-100 p-2 rounded">ID Booking: <span id="bookingId"
+                    class="font-bold"></span></p>
+            <button onclick="closeSuccessModal()"
+                class="w-full bg-primary-green text-white py-2 rounded hover:bg-green-800 transition">
+                Lihat Tiket Saya
+            </button>
+        </div>
+    </div>
+
+    <style>
+        .countdown-font {
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+    </style>
+
+    <!-- ... -->
+
+    <!-- Midtrans Snap JS (Sandbox) -->
+    <!-- Ganti client-key dengan Client Key Sandbox Anda -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="SB-Mid-client-XXXXXXXXXXXXXXXXX"></script>
+
+    <!-- Modal Syarat & Ketentuan -->
+    <div id="termsModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[60] backdrop-blur-sm p-4">
+        <div
+            class="bg-white rounded-3xl shadow-2xl p-8 max-w-lg w-full mx-4 border border-gray-100 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleTermsModal(false)" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="mb-6">
+                <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center mb-4">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-primary-green"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 tracking-tight">Syarat & Ketentuan</h3>
+                <p class="text-sm text-gray-500 mt-1 font-medium italic">Patuhi peraturan demi kelestarian alam.</p>
+            </div>
+            <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
+                <div class="flex gap-3">
+                    <span
+                        class="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-bold">1</span>
+                    <p>Tiket hanya berlaku sesuai dengan <b>Kategori Kebangsaan</b> dan <b>Tanggal Kunjungan</b> yang
+                        didaftarkan.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span
+                        class="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-bold">2</span>
+                    <p>Tiket yang sudah dibayar bersifat <b>Final</b> dan tidak dapat di-refund (dikembalikan dalam
+                        bentuk uang).</p>
+                </div>
+                <div class="flex gap-3">
+                    <span
+                        class="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-bold">3</span>
+                    <p>Wajib menjaga kebersihan dan <b>dilarang keras</b> membuang sampah sembarangan di area Taman
+                        Nasional.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span
+                        class="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-bold">4</span>
+                    <p>Dilarang mengganggu, memberi makan, atau berburu satwa liar di dalam kawasan Tesso Nilo.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span
+                        class="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-bold">5</span>
+                    <p>Segala bentuk kerusakan fasilitas atau gangguan pada alam akan dikenakan sanksi sesuai hukum yang
+                        berlaku.</p>
+                </div>
+            </div>
+            <div class="mt-10">
+                <button onclick="toggleTermsModal(false)"
+                    class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-lg">Saya
+                    Mengerti</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const API_BASE = window.location.origin + '/tessonilov3/api';
+        let currentBookingData = {};
+        let activeBookingId = null;
+        let countdownInterval;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            checkSession();
+            setupEventListeners();
+            loadUserBookings();
+            calculateTotalPrice();
+        });
+
+        function toggleTermsModal(show) {
+            const modal = document.getElementById('termsModal');
+            if (show) {
+                modal.classList.remove('hidden');
+                lucide.createIcons();
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // ... (API BASE etc) ...
+
+        function calculateTotalPrice() {
+            const tickets = parseInt(document.getElementById('tickets').value) || 1;
+            const type = document.getElementById('citizen_type').value;
+            const pricePerTicket = type === 'wni' ? 15000 : 150000;
+            const total = tickets * pricePerTicket;
+
+            document.getElementById('totalPrice').textContent = 'Rp ' + formatNumber(total);
+        }
+
+        function setupEventListeners() {
+            const form = document.getElementById('bookingForm');
+            if (form) {
+                form.addEventListener('submit', handleFormSubmit);
+            }
+
+            const ticketsInput = document.getElementById('tickets');
+            if (ticketsInput) {
+                ticketsInput.addEventListener('input', calculateTotalPrice);
+            }
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        }
+
+        function checkSession() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                alert('Silakan login terlebih dahulu');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function changeQuantity(val) {
+            const input = document.getElementById('tickets');
+            let current = parseInt(input.value) || 1;
+            current += val;
+            if (current < 1) current = 1; input.value = current; calculateTotalPrice();
+        } function handleFormSubmit(e) {
+            e.preventDefault(); const citizenType = document.getElementById('citizen_type').value; const
+                tickets = parseInt(document.getElementById('tickets').value); const pricePerTicket = citizenType === 'wni' ? 15000 :
+                    150000; currentBookingData = {
+                        name: document.getElementById('name').value, email:
+                            document.getElementById('email').value, phone: document.getElementById('phone').value, date_booking:
+                            document.getElementById('date_booking').value, tickets: tickets, citizen_type: citizenType, notes:
+                            document.getElementById('notes').value
+                    }; // Show confirmation modal first const total=tickets * pricePerTicket;
+            document.getElementById('confirmTotal').textContent = 'Rp ' + formatNumber(total);
+            document.getElementById('confirmDetails').innerHTML = ` <div class="flex justify-between border-b pb-2"><span
+            class="text-gray-600">Nama</span> <span class="font-semibold">${currentBookingData.name}</span></div>
+        <div class="flex justify-between border-b py-2"><span class="text-gray-600">Kebangsaan</span> <span
+                class="font-semibold">${citizenType.toUpperCase()}</span></div>
+        <div class="flex justify-between border-b py-2"><span class="text-gray-600">Tanggal</span> <span
+                class="font-semibold">${new Date(currentBookingData.date_booking).toLocaleDateString('id-ID')}</span>
+        </div>
+        <div class="flex justify-between border-b py-2"><span class="text-gray-600">Tiket</span> <span
+                class="font-semibold">${currentBookingData.tickets} Tiket</span></div>
+        <div class="flex justify-between py-2"><span class="text-gray-600">Metode</span> <span
+                class="font-semibold text-primary-green">QRIS</span></div>
+        `;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function cancelConfirm() {
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+
+        function processToPayment() {
+            // Create Reservation PENDING first
+            document.getElementById('confirmModal').classList.add('hidden');
+
+            // Show Loading State
+            const btn = document.querySelector('button[onclick="processToPayment()"]');
+            const originalText = btn ? btn.textContent : 'Lanjut Bayar';
+            if (btn) btn.textContent = 'Memproses...';
+
+            fetch(API_BASE + '/reservasi/create.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentBookingData)
+            })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        activeBookingId = result.data.id;
+                        // Show the premium payment modal within the page
+                        showPaymentModal(result.data);
+                    } else {
+                        alert('Error: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Network Error');
+                })
+                .finally(() => {
+                    if (btn) btn.textContent = originalText;
+                });
+        }
+
+        function showPaymentModal(data) {
+            document.getElementById('paymentModal').classList.remove('hidden');
+
+            // Fill Data
+            document.getElementById('paymentToken').textContent = 'TN-' + Math.random().toString(36).substring(2,
+                7).toUpperCase();
+            document.getElementById('paymentTotalPremium').textContent = 'Rp ' + formatNumber(data.total_price);
+            document.getElementById('paymentTotalSmall').textContent = 'Rp ' + formatNumber(data.total_price);
+            document.getElementById('detailName').textContent = data.name;
+            document.getElementById('detailPhone').textContent = currentBookingData.phone;
+            document.getElementById('detailTrxId').textContent = 'TN ' + data.id.toString().padStart(6, '0');
+
+            const dateObj = new Date();
+            document.getElementById('detailDate').textContent = dateObj.toLocaleDateString('id-ID', {
+                day: 'numeric', month:
+                    'short', year: 'numeric'
+            }) + ', ' + dateObj.toLocaleTimeString('id-ID', {
+                hour: '2-digit', minute: '2-digit'
+            });
+
+            // QRIS Update
+            const qrData =
+                `00020101021126570014ID.CO.GOJEK.WWW01189360091431234567895204481453033605802ID5916TessoNilo6004Riau6304${data.id}`;
+            document.getElementById('qrisImage').src =
+                `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+
+            // Start Timer (60 minutes)
+            let timeLeft = 3600;
+            const countdownEl = document.getElementById('countdown');
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                const h = Math.floor(timeLeft / 3600).toString().padStart(2, '0');
+                const m = Math.floor((timeLeft % 3600) / 60).toString().padStart(2, '0');
+                const s = (timeLeft % 60).toString().padStart(2, '0');
+                countdownEl.textContent = `${h} : ${m} : ${s}`;
+                timeLeft--;
+                if (timeLeft < 0) { clearInterval(countdownInterval); alert('Waktu pembayaran habis.'); closePaymentModal(); }
+            }, 1000);
+        } function closePaymentModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+            clearInterval(countdownInterval);
+        } function copyToClipboard(type) {
+            const text = type === 'trxid' ?
+                document.getElementById('detailTrxId').textContent : document.getElementById('paymentToken').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`${type.toUpperCase()} dikopi ke clipboard`);
+            });
+        }
+
+        function simulatePaymentSuccess() {
+            // Simulasi: User sudah bayar -> Update status ke backend (Simulasi Payment Gateway)
+            if (!activeBookingId) return;
+
+            fetch(API_BASE + '/reservasi/confirm_payment.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: activeBookingId
+                })
+            })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        closePaymentModal();
+                        document.getElementById('bookingId').textContent = '#' + activeBookingId;
+                        document.getElementById('successModal').classList.remove('hidden');
+                        document.getElementById('bookingForm').reset();
+                        // Auto scroll to history section to fulfill "masuk ke halaman riwayat"
+                        loadUserBookings();
+                        document.getElementById('bookingsList').scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        alert('Gagal memverifikasi pembayaran: ' + result.message);
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+
+        function closeSuccessModal() {
+            if (activeBookingId) {
+                window.location.href = 'tiket.html?id=' + activeBookingId;
+            } else {
+                document.getElementById('successModal').classList.add('hidden');
+            }
+        }
+
+        function loadUserBookings() {
+            fetch(API_BASE + '/reservasi/read.php')
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        const bookings = result.data.data.slice(0, 3);
+                        const container = document.getElementById('bookingsList');
+
+                        if (bookings.length === 0) {
+                            container.innerHTML = '<p class="text-gray-600 text-sm">Belum ada pemesanan</p>';
+                        } else {
+                            container.innerHTML = bookings.map(booking => `
+            <div class="p-3 border-l-4 border-primary-green bg-green-50 rounded">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="font-semibold text-sm">Booking #${booking.id}</p>
+                        <p class="text-xs text-gray-600">${new Date(booking.date_booking).toLocaleDateString('id-ID')} -
+                            ${booking.tickets} tiket</p>
+                    </div>
+                    ${booking.status === 'confirmed' ? `
+                    <a href="tiket.html?id=${booking.id}"
+                        class="text-[10px] bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 transition font-bold">
+                        E-TIKET
+                    </a>
+                    ` : ''}
+                </div>
+                <span class="text-xs px-2 py-1 rounded mt-1 inline-block
+                                        ${booking.status === 'confirmed' ? 'bg-green-200 text-green-800' :
+                                    booking.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
+                                        'bg-red-200 text-red-800'}">
+                    ${booking.status}
+                </span>
+            </div>
+            `).join('');
+                        }
+                    }
+                })
+                .catch(error => console.error('Failed to load bookings:', error));
+        }
+
+
+    </script>
+</body>
+
+</html>

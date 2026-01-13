@@ -1,0 +1,62 @@
+/* CATATAN PENTING:
+Warna kustom Tailwind didefinisikan di script.js (menggunakan CDN) 
+dan utility class seperti 'primary-green' digunakan di HTML/JS.
+*/
+
+/* CSS Kustom untuk Latar Belakang dan Scroll */
+.hero-bg {
+    /* Placeholder Image: Green/Forest Theme */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/1b5e20/ffffff?text=Tesso+Nilo+Rimba+Terakhir');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-bg {
+    /* Updated with User Image */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/halut.png');
+    background-size: cover;
+    background-position: center;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Styling untuk card listing - image placeholders */
+.card-img-1 {
+    background-image: url('https://placehold.co/600x400/22c55e/ffffff?text=Konservasi');
+}
+
+.card-img-2 {
+    background-image: url('https://placehold.co/600x400/0d9488/ffffff?text=Flora');
+}
+
+.card-img-3 {
+    background-image: url('https://placehold.co/600x400/1d4ed8/ffffff?text=Ekowisata');
+}
+
+.card-img-4 {
+    background-image: url('https://placehold.co/600x400/be123c/ffffff?text=Patroli');
+}
+
+/* Utility styles untuk memastikan footer di bawah */
+.view-content {
+    /* Untuk index.html (SPA) - tinggi penuh */
+    min-height: calc(100vh - 80px);
+}
+
+/* Style tambahan untuk konten di file HTML terpisah */
+.view-content-public {
+    /* Untuk about.html/fauna.html (MPA) - ruang untuk header (sekitar 72px) dan footer (40px) */
+    min-height: calc(100vh - 40px - 72px);
+    padding-top: 5rem;
+    /* Tambahkan padding atas agar konten tidak tertutup header sticky */
+}
+
+/* Style untuk menu admin yang sedang aktif */
+.active-menu {
+    background-color: #1b742e;
+    /* primary-green */
+    color: white;
+    font-weight: 600;
+}

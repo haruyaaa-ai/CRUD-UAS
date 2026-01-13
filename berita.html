@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berita & Laporan - Tesso Nilo Project</title>
+    <!-- Memuat Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Link ke file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="font-sans text-text-dark bg-bg-light flex flex-col min-h-screen">
+
+    <!-- PLACEHOLDER HEADER: Akan diisi oleh script.js saat DOMContentLoaded -->
+    <header id="mainHeader"></header>
+
+    <!-- Konten Utama: Akan diisi oleh script.js -->
+    <div id="app" class="view-content-public flex-grow py-10 md:py-20">
+        <!-- Konten Berita/Laporan akan dirender di sini, baik daftar (default) atau detail (jika ada hash) -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-bold text-primary-green mb-10 text-center">Memuat Informasi...</h1>
+        </div>
+    </div>
+
+    <!-- Footer Wajib (Selalu Tampil) -->
+    <footer id="mainFooter" class="bg-text-dark text-gray-400 py-4 text-center text-sm mt-auto">
+        <!-- GANTI DENGAN DATA ANDA -->
+        @Copyright by 23552011300_Damar Satriatama Putra_TIF RP 23 CNS A
+    </footer>
+
+    <!-- Link ke file JavaScript eksternal untuk Header/Footer/Ikon dan Logika Rendering Konten -->
+    <script src="script.js?v=20"></script>
+</body>
+
+</html>

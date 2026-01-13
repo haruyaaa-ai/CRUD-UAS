@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Tesso Nilo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-green': '#1b742e',
+                        'secondary-yellow': '#ffb300',
+                        'bg-light': '#f0fdf4',
+                        'text-dark': '#1f2937',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body class="font-sans text-text-dark bg-bg-light min-h-screen">
+    <div id="app" class="flex flex-col lg:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar"
+            class="w-full lg:w-64 bg-slate-900 text-white p-4 lg:sticky lg:top-0 lg:h-screen overflow-y-auto">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-white">Admin Panel</h1>
+                <p class="text-gray-400 text-sm">Tesso Nilo System</p>
+            </div>
+            <nav class="space-y-2">
+                <button
+                    class="menu-item active-menu w-full text-left px-4 py-3 rounded text-white hover:bg-slate-800 transition"
+                    data-menu="dashboard">
+                    <i data-lucide="home" class="inline mr-2 h-5 w-5"></i> Dashboard
+                </button>
+                <button class="menu-item w-full text-left px-4 py-3 rounded text-white hover:bg-slate-800 transition"
+                    data-menu="berita">
+                    <i data-lucide="newspaper" class="inline mr-2 h-5 w-5"></i> Kelola Berita
+                </button>
+                <button class="menu-item w-full text-left px-4 py-3 rounded text-white hover:bg-slate-800 transition"
+                    data-menu="reservasi">
+                    <i data-lucide="calendar" class="inline mr-2 h-5 w-5"></i> Kelola Reservasi
+                </button>
+                <button class="menu-item w-full text-left px-4 py-3 rounded text-white hover:bg-slate-800 transition"
+                    data-menu="laporan">
+                    <i data-lucide="file-text" class="inline mr-2 h-5 w-5"></i> Laporan
+                </button>
+                <hr class="my-4 border-slate-700">
+                <button class="menu-item w-full text-left px-4 py-3 rounded text-white hover:bg-slate-800 transition"
+                    data-menu="profile">
+                    <i data-lucide="user" class="inline mr-2 h-5 w-5"></i> Profil
+                </button>
+                <button id="logoutBtn"
+                    class="w-full text-left px-4 py-3 rounded text-white hover:bg-red-700 transition">
+                    <i data-lucide="log-out" class="inline mr-2 h-5 w-5"></i> Logout
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 lg:p-8">
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="menu-content">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-primary-green mb-2">Dashboard</h2>
+                    <p class="text-gray-600">Selamat datang di sistem manajemen Taman Nasional Tesso Nilo</p>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div id="stats-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <!-- Cards will be filled by JavaScript -->
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Statistik Reservasi</h3>
+                        <canvas id="reservasiChart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold mb-4">Data Bulanan</h3>
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Berita Management View -->
+            <div id="berita-view" class="menu-content hidden">
+                <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-primary-green mb-2">Kelola Berita</h2>
+                        <p class="text-gray-600">Tambah, edit, dan hapus berita</p>
+                    </div>
+                </div>
+                <!-- Button moved outside or kept inside but styled better to avoid overlapping or hiding -->
+                <div class="mb-6">
+                    <button id="addBeritaBtn"
+                        class="bg-primary-green text-white px-6 py-2 rounded hover:bg-green-800 transition flex items-center shadow-md">
+                        <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>
+                        Tambah Berita Baru
+                    </button>
+                </div>
+
+                <!-- Add/Edit Berita Form -->
+                <div id="berita-form" class="hidden bg-white rounded-lg shadow p-6 mb-8">
+                    <h3 class="text-xl font-semibold mb-4">Form Berita</h3>
+                    <form id="formBerita" class="space-y-4">
+                        <input type="hidden" id="beritaId">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Judul</label>
+                            <input type="text" id="beritaTitle" placeholder="Judul Berita" required
+                                class="w-full border rounded px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Kategori</label>
+                            <select id="beritaCategory" name="category" title="Kategori Berita" required
+                                class="w-full border rounded px-3 py-2">
+                                <option value="">Pilih Kategori</option>
+                                <option value="Konservasi">Konservasi</option>
+                                <option value="Riset">Riset</option>
+                                <option value="Ekowisata">Ekowisata</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Gambar Utama</label>
+                            <input type="file" id="beritaImage" name="image" accept="image/*"
+                                class="w-full border rounded px-3 py-2 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Konten</label>
+                            <textarea id="beritaContent" name="content" placeholder="Isi Berita" required rows="6"
+                                class="w-full border rounded px-3 py-2"></textarea>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="submit"
+                                class="bg-primary-green text-white px-6 py-2 rounded hover:bg-green-800 transition">Simpan</button>
+                            <button type="button" id="cancelBerita"
+                                class="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400 transition">Batal</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Berita List -->
+                <div id="berita-list" class="bg-white rounded-lg shadow overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-100 border-b">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Judul</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Kategori</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Tanggal</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="berita-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Reservasi Management View -->
+            <div id="reservasi-view" class="menu-content hidden">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-primary-green mb-2">Kelola Reservasi</h2>
+                    <p class="text-gray-600">Lihat dan kelola semua reservasi pelanggan</p>
+                </div>
+
+                <!-- Reservasi Filters -->
+                <div class="bg-white rounded-lg shadow p-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Filter Status</label>
+                            <select id="reservasiFilter" title="Filter Status" class="w-full border rounded px-3 py-2">
+                                <option value="">Semua Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Cari Nama</label>
+                            <input type="text" id="reservasiSearch" placeholder="Cari nama..."
+                                class="w-full border rounded px-3 py-2">
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button id="refreshReservasi"
+                                class="flex-1 bg-primary-green text-white px-4 py-2 rounded hover:bg-green-800 transition">Refresh</button>
+                            <button id="exportReservasi"
+                                class="flex-1 bg-secondary-yellow text-gray-800 px-4 py-2 rounded hover:bg-yellow-600 transition">Export
+                                CSV</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reservasi List -->
+                <div class="bg-white rounded-lg shadow overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-100 border-b">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Nama</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Email</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Kategori</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Tanggal</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Tiket</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Total</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Status</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservasi-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Report View -->
+            <div id="laporan-view" class="menu-content hidden">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-primary-green mb-2">Laporan</h2>
+                    <p class="text-gray-600">Ekspor data dalam berbagai format (PDF, Excel/CSV, JSON)</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Export Reservasi -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-xl font-semibold mb-4">Laporan Reservasi</h3>
+                        <p class="text-gray-600 mb-4">Ekspor data reservasi dalam format PDF, Excel/CSV, atau JSON</p>
+                        <div class="space-y-2">
+                            <button
+                                class="export-btn w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center justify-center"
+                                data-type="reservasi" data-format="pdf">
+                                <i data-lucide="file-text" class="inline mr-2 h-4 w-4"></i> Export PDF
+                            </button>
+                            <button
+                                class="export-btn w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition flex items-center justify-center"
+                                data-type="reservasi" data-format="excel">
+                                <i data-lucide="file-spreadsheet" class="inline mr-2 h-4 w-4"></i> Export Excel (CSV)
+                            </button>
+                            <button
+                                class="export-btn w-full bg-secondary-yellow text-gray-800 px-4 py-2 rounded hover:bg-yellow-600 transition flex items-center justify-center"
+                                data-type="reservasi" data-format="json">
+                                <i data-lucide="download" class="inline mr-2 h-4 w-4"></i> Export JSON
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Export Berita -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-xl font-semibold mb-4">Laporan Berita</h3>
+                        <p class="text-gray-600 mb-4">Ekspor data berita dalam format PDF, Excel/CSV, atau JSON</p>
+                        <div class="space-y-2">
+                            <button
+                                class="export-btn w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center justify-center"
+                                data-type="berita" data-format="pdf">
+                                <i data-lucide="file-text" class="inline mr-2 h-4 w-4"></i> Export PDF
+                            </button>
+                            <button
+                                class="export-btn w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition flex items-center justify-center"
+                                data-type="berita" data-format="excel">
+                                <i data-lucide="file-spreadsheet" class="inline mr-2 h-4 w-4"></i> Export Excel (CSV)
+                            </button>
+                            <button
+                                class="export-btn w-full bg-secondary-yellow text-gray-800 px-4 py-2 rounded hover:bg-yellow-600 transition flex items-center justify-center"
+                                data-type="berita" data-format="json">
+                                <i data-lucide="download" class="inline mr-2 h-4 w-4"></i> Export JSON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile View -->
+            <div id="profile-view" class="menu-content hidden">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-primary-green mb-2">Profil Admin</h2>
+                    <p class="text-gray-600">Informasi profil dan pengaturan</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6 max-w-md">
+                    <div id="profile-info" class="space-y-4">
+                        <!-- Profile info will be filled by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal untuk Edit/Lihat Reservasi -->
+    <div id="reservasiModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+            <h3 class="text-2xl font-semibold mb-4">Detail Reservasi</h3>
+            <form id="formReservasi" class="space-y-4">
+                <input type="hidden" id="reservasiId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nama</label>
+                        <input type="text" id="reservasiName" placeholder="Nama Pemesan" readonly
+                            class="w-full border rounded px-3 py-2 bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" id="reservasiEmail" placeholder="Email" readonly
+                            class="w-full border rounded px-3 py-2 bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Telepon</label>
+                        <input type="text" id="reservasiPhone" placeholder="No. Telepon" readonly
+                            class="w-full border rounded px-3 py-2 bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tanggal Booking</label>
+                        <input type="date" id="reservasiDate" placeholder="Tanggal" readonly
+                            class="w-full border rounded px-3 py-2 bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Jumlah Tiket</label>
+                        <input type="number" id="reservasiTickets" min="1" placeholder="Jumlah Tiket" readonly
+                            class="w-full border rounded px-3 py-2 bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Status Pembayaran</label>
+                        <select id="reservasiStatus" title="Status Reservasi"
+                            class="w-full border rounded px-3 py-2 font-bold">
+                            <option value="pending">Pending (Menunggu Verifikasi)</option>
+                            <option value="confirmed">Confirmed (Lunas)</option>
+                            <option value="cancelled">Cancelled (Batal)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Bukti Bayar Section -->
+                <div class="mt-4 border-t pt-4">
+                    <label class="block text-sm font-medium mb-2">Bukti Pembayaran QRIS</label>
+                    <div id="proofContainer" class="border rounded p-4 bg-gray-50 text-center">
+                        <p class="text-gray-500 text-sm">Tidak ada bukti pembayaran</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 pt-4">
+                    <button type="submit"
+                        class="flex-1 bg-primary-green text-white px-4 py-2 rounded hover:bg-green-800 transition">Simpan
+                        perubahan Status</button>
+                    <button type="button"
+                        class="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
+                        onclick="document.getElementById('reservasiModal').classList.add('hidden')">Tutup</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const API_BASE = 'api';
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', function () {
+            checkSessionAndInit();
+        });
+
+        async function checkSessionAndInit() {
+            try {
+                // Check Session Check API
+                const res = await fetch(`${API_BASE}/auth/check_session.php`);
+                const result = await res.json();
+
+                if (result.success && result.data.role === 'admin') {
+                    // Save session info
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('user_data', JSON.stringify(result.data));
+
+                    // Initialize Dashboard Components
+                    setupDashboardListeners();
+                    loadStats();
+                    loadReservasiChart();
+                    loadMonthlyChart();
+                    loadProfileInfo();
+
+                    // Load default view data if needed
+                    loadReservasiList();
+                } else {
+                    console.warn('Session Check Failed:', result);
+                    alert('Sesi kadaluarsa atau akses ditolak. Detail: ' + (result.message || 'Unknown Error'));
+                    // window.location.href = 'index.html'; // Tahan dulu redirect biar user bisa baca
+                    // Redirect manual setelah user klik OK
+                    window.location.href = 'login.html';
+                }
+            } catch (e) {
+                console.error('Session check failed', e);
+                alert('Gagal mengecek sesi login: ' + e.message);
+                window.location.href = 'login.html';
+            }
+        }
+
+        function setupDashboardListeners() {
+            // Sidebar Navigation
+            document.querySelectorAll('.menu-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update Active Link
+                    document.querySelectorAll('.menu-item').forEach(b => b.classList.remove('active-menu', 'bg-slate-800'));
+                    btn.classList.add('active-menu', 'bg-slate-800');
+
+                    // Show Content
+                    const menuid = btn.getAttribute('data-menu');
+                    document.querySelectorAll('.menu-content').forEach(el => el.classList.add('hidden'));
+                    document.getElementById(menuid + '-view').classList.remove('hidden');
+
+                    // Refresh data based on active view
+                    if (menuid === 'reservasi') loadReservasiList();
+                    if (menuid === 'berita') loadBeritaList();
+                });
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+
+            // Reservasi Filters
+            const refreshBtn = document.getElementById('refreshReservasi');
+            if (refreshBtn) refreshBtn.addEventListener('click', loadReservasiList);
+
+            const filterSelect = document.getElementById('reservasiFilter');
+            if (filterSelect) filterSelect.addEventListener('change', loadReservasiList);
+
+            const searchInput = document.getElementById('reservasiSearch');
+            if (searchInput) searchInput.addEventListener('input', loadReservasiList);
+
+            // Edit Reservasi Form
+            const formReservasi = document.getElementById('formReservasi');
+            if (formReservasi) formReservasi.addEventListener('submit', updateReservasi);
+
+            // Export Buttons
+            const exportReservasiBtn = document.getElementById('exportReservasi');
+            if (exportReservasiBtn) {
+                exportReservasiBtn.addEventListener('click', () => {
+                    handleExport('reservasi', 'excel');
+                });
+            }
+
+            document.querySelectorAll('.export-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const target = e.currentTarget;
+                    handleExport(target.dataset.type, target.dataset.format);
+                });
+            });
+
+            // Berita Actions (Placeholder)
+            const addBeritaBtn = document.getElementById('addBeritaBtn');
+            if (addBeritaBtn) {
+                addBeritaBtn.addEventListener('click', () => {
+                    document.getElementById('berita-form').classList.remove('hidden');
+                    document.getElementById('formBerita').reset();
+                    document.getElementById('beritaId').value = '';
+                });
+            }
+            const cancelBerita = document.getElementById('cancelBerita');
+            if (cancelBerita) {
+                cancelBerita.addEventListener('click', () => {
+                    document.getElementById('berita-form').classList.add('hidden');
+                });
+            }
+
+            // Berita Form Submission
+            const formBerita = document.getElementById('formBerita');
+            if (formBerita) formBerita.addEventListener('submit', handleBeritaSubmit);
+        }
+
+        // --- CORE FUNCTIONS ---
+
+        // --- BERITA MANAGEMENT ---
+
+        async function loadBeritaList() {
+            const tbody = document.getElementById('berita-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Memuat berita...</td></tr>';
+
+            try {
+                const response = await fetch(`${API_BASE}/berita/read.php`);
+                const result = await response.json();
+
+                if (!result.success || !result.data || result.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Belum ada berita.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = result.data.map(item => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-6 py-3 font-medium text-gray-900">${item.title}</td>
+                    <td class="px-6 py-3">
+                        <span class="px-2 py-1 rounded text-xs bg-gray-100 border text-gray-600">${item.category}</span>
+                    </td>
+                    <td class="px-6 py-3 text-sm text-gray-500">${formatDate(item.date)}</td>
+                    <td class="px-6 py-3 text-sm text-gray-500">${item.image ? '<i data-lucide="image" class="w-4 h-4 text-primary-green"></i>' : '-'}</td>
+                    <td class="px-6 py-3">
+                        <button onclick="deleteBerita(${item.id})" class="text-red-600 hover:text-red-800 text-sm font-semibold transition">
+                            <i data-lucide="trash-2" class="w-4 h-4 inline"></i> Hapus
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+                lucide.createIcons();
+
+            } catch (error) {
+                console.error('Error loading berita:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-red-500">Gagal memuat berita.</td></tr>';
+            }
+        }
+
+        async function handleBeritaSubmit(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('formBerita');
+            const formData = new FormData(form);
+            // Add manual fields just in case FormData misses them due to ID/Name mismatch
+            formData.set('title', document.getElementById('beritaTitle').value);
+            formData.set('category', document.getElementById('beritaCategory').value);
+            formData.set('content', document.getElementById('beritaContent').value);
+
+            const fileInput = document.getElementById('beritaImage');
+            if (fileInput.files.length > 0) {
+                formData.set('image', fileInput.files[0]);
+            }
+
+            // Check if Edit or Create (Only Create supported for now per user request context)
+            // If ID exists -> Update (TODO: Create update.php)
+            const id = document.getElementById('beritaId').value;
+            const endpoint = id ? `${API_BASE}/berita/update.php` : `${API_BASE}/berita/create.php`;
+
+            // Show Loading
+            const btn = form.querySelector('button[type="submit"]');
+            const oldText = btn.textContent;
+            btn.textContent = 'Menyimpan...';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Berita berhasil disimpan!');
+                    document.getElementById('berita-form').classList.add('hidden');
+                    form.reset();
+                    loadBeritaList();
+                } else {
+                    alert('Gagal: ' + result.message);
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Terjadi kesalahan saat menyimpan berita.');
+            } finally {
+                btn.textContent = oldText;
+            }
+        }
+
+        async function deleteBerita(id) {
+            if (!confirm('Yakin ingin menghapus berita ini?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/berita/delete.php`, {
+                    method: 'POST', // or DELETE
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, method: 'DELETE' })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    loadBeritaList();
+                } else {
+                    alert('Gagal menghapus: ' + result.message);
+                }
+            } catch (e) {
+                alert('Gagal connect ke server');
+            }
+        }
+        async function loadReservasiList() {
+            const tbody = document.getElementById('reservasi-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4">Memuat data...</td></tr>';
+
+            try {
+                const response = await fetch(`${API_BASE}/reservasi/read.php`);
+                const result = await response.json();
+
+                if (!result.success || !result.data || !result.data.data) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4">Belum ada data reservasi.</td></tr>';
+                    return;
+                }
+
+                const reservasiData = result.data.data;
+                const filterStatus = document.getElementById('reservasiFilter').value.toLowerCase();
+                const searchText = document.getElementById('reservasiSearch').value.toLowerCase();
+
+                const filteredData = reservasiData.filter(r => {
+                    const s = r.status ? r.status.toLowerCase() : 'pending';
+                    const matchStatus = !filterStatus || s === filterStatus;
+                    const matchName = !searchText || r.name.toLowerCase().includes(searchText);
+                    return matchStatus && matchName;
+                });
+
+                if (filteredData.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4">Data tidak ditemukan sesuai filter.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = filteredData.map(res => `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-6 py-3 font-medium text-gray-900">${res.name}</td>
+                        <td class="px-6 py-3">${res.email || '-'}</td>
+                        <td class="px-6 py-3 font-semibold text-xs">${(res.citizen_type || 'wni').toUpperCase()}</td>
+                        <td class="px-6 py-3">${formatDate(res.date_booking)}</td>
+                        <td class="px-6 py-3 text-center">${res.tickets}</td>
+                        <td class="px-6 py-3">Rp ${formatNumber(res.total_price)}</td>
+                        <td class="px-6 py-3">
+                            <span class="px-2 py-1 rounded text-xs font-semibold
+                                ${(res.status || '').toLowerCase() === 'confirmed' ? 'bg-green-100 text-green-800' :
+                        (res.status || '').toLowerCase() === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'}">
+                                ${res.status}
+                            </span>
+                        </td>
+                        <td class="px-6 py-3">
+                            <button onclick="viewReservasi(${res.id})" class="text-blue-600 hover:text-blue-800 text-sm font-semibold transition">
+                                <i data-lucide="eye" class="w-4 h-4 inline"></i> Detail
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                lucide.createIcons(); // Refresh icons for new rows
+
+            } catch (error) {
+                console.error('Error loading reservasi:', error);
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-red-500">Gagal memuat data.</td></tr>';
+            }
+        }
+
+        async function viewReservasi(id) {
+            try {
+                // Fetch fresh data for detail
+                const response = await fetch(`${API_BASE}/reservasi/read.php`);
+                const result = await response.json();
+
+                if (result.success && result.data && result.data.data) {
+                    const res = result.data.data.find(r => r.id == id);
+
+                    if (res) {
+                        document.getElementById('reservasiId').value = res.id;
+                        document.getElementById('reservasiName').value = res.name;
+                        document.getElementById('reservasiEmail').value = res.email || '';
+                        document.getElementById('reservasiPhone').value = res.phone || '';
+                        document.getElementById('reservasiDate').value = res.date_booking || '';
+                        document.getElementById('reservasiTickets').value = res.tickets;
+                        document.getElementById('reservasiStatus').value = res.status;
+
+                        // Display Proof if ANY (logic Simulasi: no image in DB, but status confirmed)
+                        const proofContainer = document.getElementById('proofContainer');
+                        if (res.payment_proof && res.payment_proof !== 'null') {
+                            proofContainer.innerHTML = `
+                                <img src="${res.payment_proof}" alt="Bukti Pembayaran" class="max-h-64 mx-auto rounded border shadow-sm">
+                                <a href="${res.payment_proof}" target="_blank" class="text-blue-600 text-sm underline mt-2 block">Lihat Ukuran Penuh</a>
+                            `;
+                        } else if (res.status === 'confirmed') {
+                            proofContainer.innerHTML = `
+                                <div class="bg-green-50 p-4 rounded text-green-700">
+                                    <i data-lucide="check-circle" class="w-8 h-8 mx-auto mb-2"></i>
+                                    <p class="font-semibold">Pembayaran Terkonfirmasi Otomatis (QRIS)</p>
+                                </div>
+                             `;
+                            lucide.createIcons();
+                        } else {
+                            proofContainer.innerHTML = '<p class="text-gray-500 text-sm italic">Belum ada pembayaran / bukti.</p>';
+                        }
+
+                        document.getElementById('reservasiModal').classList.remove('hidden');
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Gagal mengambil detail reservasi');
+            }
+        }
+
+        async function updateReservasi(e) {
+            e.preventDefault();
+            const id = document.getElementById('reservasiId').value;
+            const newStatus = document.getElementById('reservasiStatus').value;
+
+            // Gunakan API update admin yang benar
+            try {
+                const response = await fetch(`${API_BASE}/reservasi/update.php`, {
+                    method: 'POST', // or PUT depending on your PHP implementation (php: put logic inside post or check method)
+                    // My previous update.php used PUT for some logic, but let's conform to standard:
+                    // Usually PHP needs special handling for PUT body. Let's use POST if update.php supports it or PUT with json
+                    // My update.php logic: if ($_SERVER['REQUEST_METHOD'] !== 'PUT') ... WAIT
+                    // Wait, my update.php required PUT. Let's send PUT.
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: id,
+                        status: newStatus
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Status berhasil diperbarui!');
+                    document.getElementById('reservasiModal').classList.add('hidden');
+                    loadReservasiList();
+                    loadStats();
+                } else {
+                    alert('Gagal update: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Update error:', error);
+                alert('Gagal update (Network Error)');
+            }
+        }
+
+        // --- UTILS & REPORTING ---
+
+        function loadStats() {
+            // Simple stats calculation from current list fetch or separate API
+            // For UI responsiveness, we can fetch list first then count
+            fetch(`${API_BASE}/reservasi/read.php`)
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        const data = result.data.data;
+                        const total = data.length;
+                        const income = data.filter(r => r.status === 'confirmed').reduce((acc, curr) => acc + parseInt(curr.total_price), 0);
+                        const pending = data.filter(r => r.status === 'pending').length;
+
+                        // Render Stats
+                        const statsContainer = document.getElementById('stats-container');
+                        statsContainer.innerHTML = `
+                        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+                             <p class="text-gray-500 text-sm">Total Reservasi</p>
+                             <h3 class="text-2xl font-bold mt-1">${total}</h3>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+                             <p class="text-gray-500 text-sm">Pendapatan Masuk</p>
+                             <h3 class="text-2xl font-bold mt-1">Rp ${formatNumber(income)}</h3>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
+                             <p class="text-gray-500 text-sm">Menunggu Konfirmasi</p>
+                             <h3 class="text-2xl font-bold mt-1">${pending}</h3>
+                        </div>
+                        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+                             <p class="text-gray-500 text-sm">Pengunjung Bulan Ini</p>
+                             <h3 class="text-2xl font-bold mt-1">100+</h3>
+                        </div>
+                     `;
+                    }
+                });
+        }
+
+        function loadReservasiChart() {
+            const ctx = document.getElementById('reservasiChart').getContext('2d');
+            // Destroy existing if needed logic omitted for simplicity
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Confirmed', 'Cancelled'],
+                    datasets: [{
+                        data: [5, 15, 2], // Dummy initial
+                        backgroundColor: ['#FCD34D', '#10B981', '#EF4444']
+                    }]
+                }
+            });
+        }
+
+        function loadMonthlyChart() {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Pengunjung',
+                        data: [65, 59, 80, 81, 56, 55],
+                        backgroundColor: '#1b742e'
+                    }]
+                }
+            });
+        }
+
+        function loadProfileInfo() {
+            const user = JSON.parse(sessionStorage.getItem('user_data') || '{}');
+            const container = document.getElementById('profile-info');
+            container.innerHTML = `
+                <div class="border-b pb-2">
+                    <label class="text-xs text-gray-500 uppercase">Nama Lengkap</label>
+                    <p class="font-medium text-lg">${user.full_name || 'Administrator'}</p>
+                </div>
+                 <div class="border-b pb-2">
+                    <label class="text-xs text-gray-500 uppercase">Email</label>
+                    <p class="font-medium text-lg">${user.email || 'admin@tessonilo.com'}</p>
+                </div>
+                <div>
+                     <label class="text-xs text-gray-500 uppercase">Role</label>
+                    <span class="inline-block bg-primary-green text-white px-2 py-1 rounded text-xs uppercase mt-1">Admin</span>
+                </div>
+            `;
+        }
+
+        function handleExport(type, format) {
+            const url = `${API_BASE}/report/export.php?type=${type}&format=${format}`;
+
+            if (format === 'pdf') {
+                // Untuk PDF, buka di tab baru agar lebih stabil dan terlihat jika ada error
+                window.open(url, '_blank');
+            } else {
+                // Untuk CSV/JSON, gunakan metode download link
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = '';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                sessionStorage.clear();
+                window.location.href = 'index.html'; // Or api/auth/logout.php if implemented
+            }
+        }
+
+        function formatNumber(num) {
+            return (num || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+    </script>
+</body>
+
+</html>
