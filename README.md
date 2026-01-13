@@ -1,3 +1,8 @@
+PROGRES UAS
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ae608b85-fc5d-4d9c-a5dd-5c3306c775b9" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8bc72f49-e909-45b9-8c5f-e7371fd5a65e" />
+<img width="1920" height="1309" alt="50fddda7-3915-4331-a84c-57917d12c652" src="https://github.com/user-attachments/assets/b50877ab-c452-4f4c-bacd-abdfd46949d9" />
+
 # Taman Nasional Tesso Nilo - Sistem Manajemen Tiket & Berita
 
 **Status**: ✅ Produksi Ready  
